@@ -61,10 +61,10 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
             
-        <Button Width="250"  Height="60" Margin="20,0">
+        <Button Width="250"  Height="60" Margin="20,0" FontSize="20" Background="Transparent" BorderBrush="Red">
             Write
-        </Button> 
-            <Button Width="250" Height="60" Margin="20,0">
+        </Button>
+            <Button Width="250" Height="60" Margin="20,0"  FontSize="20" Background="Transparent" BorderBrush="Red">
             Read
         </Button>
         </StackPanel>
