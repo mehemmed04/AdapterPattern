@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +17,118 @@ using System.Windows.Shapes;
 
 namespace WpfApp1
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
+    class User
+    {
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int Age { get; set; }
+        public string Speciality { get; set; }
+        public DateTime? BirthDate { get; set; }
+    }
+   
+    interface IAdapter
+    {
+        void Write(User u);
+    }
+    class XmlWriter
+    {
+        public void WriteToXml(User u)
+        {
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(User));
+            var path = u.Name +".xml";
+            System.IO.FileStream file = System.IO.File.Create(path);
+            writer.Serialize(file, u);
+            file.Close();
+        }
+    }
+    class XmlAdapter : IAdapter
+    {
+        private XmlWriter _writer;
+
+        public XmlAdapter(XmlWriter writer)
+        {
+            _writer = writer;
+        }
+
+        public void Write(User u)
+        {
+            _writer.WriteToXml(u);
+        }
+    }
+    class JsonAdapter : IAdapter
+    {
+        private JsonWriter _writer;
+
+        public JsonAdapter(JsonWriter writer)
+        {
+            _writer = writer;
+        }
+
+        public void Write(User u)
+        {
+            _writer.WriteToJson(u);
+        }
+    }
+
+    class JsonWriter
+    {
+        public void WriteToJson(User u)
+        {
+            JsonSerializerSettings _options = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+
+            var jsonString = JsonConvert.SerializeObject(u, _options);
+            File.WriteAllText(u.Name + ".json", jsonString);
+        }
+    }
+
+    class Converter
+    {
+        private readonly IAdapter _adapter;
+
+        public Converter(IAdapter adapter)
+        {
+            _adapter = adapter;
+        }
+        public void Write(User u)
+        {
+            _adapter.Write(u);
+        }
+    }
+
+
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            User user = new User()
+            {
+                Name = NameTxtb.Text,
+                Surname = SurnameTxtb.Text,
+                Age = int.Parse(AgeTxtb.Text),
+                BirthDate = BirtdateDatepicker.SelectedDate,
+                Speciality = SpecialityTxtb.Text,
+            };
+
+
+            IAdapter adapter;
+            if (JsonRadioButton.IsChecked == true)
+            {
+                XmlWriter xmlWriter = new XmlWriter();
+                adapter=new XmlAdapter(xmlWriter);
+            }
+            else if (XmlRadioButton.IsChecked == true)
+            {
+                JsonWriter jsonWriter = new JsonWriter();
+                adapter = new JsonAdapter(jsonWriter);
+            }
+            else { adapter= null; }
+            adapter.Write(user);
         }
     }
 }

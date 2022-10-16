@@ -55,33 +55,32 @@
 
         <StackPanel VerticalAlignment="Center" Margin="20,0">
             <TextBlock>Name</TextBlock>
-            <TextBox></TextBox>
+            <TextBox Name="NameTxtb"></TextBox>
             <TextBlock>Surname</TextBlock>
-            <TextBox></TextBox>
+            <TextBox Name="SurnameTxtb"></TextBox>
             <TextBlock>Age</TextBlock>
-            <TextBox></TextBox>
+            <TextBox Name="AgeTxtb"></TextBox>
             <TextBlock>Speciality</TextBlock>
-            <TextBox></TextBox>
+            <TextBox Name="SpecialityTxtb"></TextBox>
             <TextBlock>DateTime</TextBlock>
-            <DatePicker BorderThickness="0"  ></DatePicker>
+            <DatePicker Name="BirtdateDatepicker" BorderThickness="0"  ></DatePicker>
             
             
         </StackPanel>
 
 
         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <RadioButton Margin="20,5" FontSize="14">JSON</RadioButton>
-            <RadioButton Margin="20,5" FontSize="14">XML</RadioButton>
+            <RadioButton Name="JsonRadioButton" Margin="20,5" FontSize="14">JSON</RadioButton>
+            <RadioButton Name="XmlRadioButton" Margin="20,5" FontSize="14">XML</RadioButton>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" 
                     Orientation="Horizontal"
                     HorizontalAlignment="Center">
             
-        <Button Width="250"  Height="60" Margin="20,0" FontSize="20" Background="Transparent" BorderBrush="Red">
+        <Button Width="250"  Height="60" Margin="20,0" FontSize="20" Background="Transparent" BorderBrush="Red" Click="Button_Click">
             Write
         </Button>
-            <Button Width="250" Height="60"  FontSize="20" Background="Transparent" BorderBrush="Red" Content="Read"/>
         </StackPanel>
         
     </Grid>
