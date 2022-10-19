@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace WpfApp1
 {
@@ -35,11 +36,14 @@ namespace WpfApp1
     {
         public void WriteToXml(User u)
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(User));
-            var path = u.Name +".xml";
-            System.IO.FileStream file = System.IO.File.Create(path);
-            writer.Serialize(file, u);
-            file.Close();
+            string fileName = $"{u.Name}.xml";
+            System.Xml.XmlWriter xmlWirter = System.Xml.XmlWriter.Create(fileName);
+            xmlWirter.WriteStartDocument();
+            xmlWirter.WriteStartElement("Etiket");
+            xmlWirter.WriteString(u.Name + " " + u.Surname + " " + u.Speciality + " " + u.BirthDate);
+            xmlWirter.WriteEndElement();
+            xmlWirter.WriteEndDocument();
+            xmlWirter.Close();
         }
     }
     class XmlAdapter : IAdapter
@@ -117,18 +121,20 @@ namespace WpfApp1
 
 
             IAdapter adapter;
-            if (JsonRadioButton.IsChecked == true)
+            if (XmlRadioButton.IsChecked == true)
             {
                 XmlWriter xmlWriter = new XmlWriter();
                 adapter=new XmlAdapter(xmlWriter);
             }
-            else if (XmlRadioButton.IsChecked == true)
+            else if (JsonRadioButton.IsChecked == true)
             {
                 JsonWriter jsonWriter = new JsonWriter();
                 adapter = new JsonAdapter(jsonWriter);
             }
             else { adapter= null; }
             adapter.Write(user);
+
+            System.Windows.MessageBox.Show("Writed Succesfully");
         }
     }
 }
